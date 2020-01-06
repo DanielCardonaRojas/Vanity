@@ -37,8 +37,8 @@ public func +(_ lhs: GenericStyle, rhs: GenericStyle) -> GenericStyle {
 }
 
 @_functionBuilder
-struct StyleBuilder {
-    static func buildBlock<T>(_ styles: Style<T>...) -> Style<T> {
+public struct StyleBuilder {
+    public static func buildBlock<T>(_ styles: Style<T>...) -> Style<T> {
         var allStyles = styles
         let firstStyle = allStyles.remove(at: 0)
         return styles.reduce(firstStyle, { accumulatedStyle, newStyle in accumulatedStyle + newStyle })
