@@ -36,22 +36,6 @@ public func +(_ lhs: GenericStyle, rhs: GenericStyle) -> GenericStyle {
     }
 }
 
-// MARK: Component Specific helpers
-extension UIView {
-    public func applying(_ style: GenericStyle) {
-        style.apply(to: self)
-    }
-}
-
-@_functionBuilder
-struct GenericStyleBuilder {
-    static func buildBlock(_ styles: GenericStyle...) -> GenericStyle {
-        var allStyles = styles
-        let firstStyle = allStyles.remove(at: 0)
-        return styles.reduce(firstStyle, { accumulatedStyle, newStyle in accumulatedStyle + newStyle })
-    }
-}
-
 @_functionBuilder
 struct StyleBuilder {
     static func buildBlock<T>(_ styles: Style<T>...) -> Style<T> {
@@ -62,19 +46,9 @@ struct StyleBuilder {
 }
 
 public enum Vanity {
-    public static func combine(@GenericStyleBuilder _ content: () -> GenericStyle) -> GenericStyle {
-        let styling = content()
-        return styling
-    }
-    
     public static func combine<T: UIView>(@StyleBuilder _ content: () -> Style<T>) -> Style<T> {
         let styling = content()
         return styling
-    }
-    
-    public static func style(view: UIView, @GenericStyleBuilder _ content: () -> GenericStyle) {
-        let styling = content()
-        view.applying(styling)
     }
     
     public static func style<T: UIView>(view: T, @StyleBuilder _ content: () -> Style<T>) {

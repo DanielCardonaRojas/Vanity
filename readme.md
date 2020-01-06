@@ -58,19 +58,26 @@ enum AppTheme {
 ```
 
 **Mark apply to some view**
+
+Can be used as a property wrapper
 ```swift
 class TestView: UIView {
-    func styleView() {
-        Vanity.style(view: self) {
-            //Adhoc styling
-            GenericStyle { v in
-                v.backgroundColor = .blue
-            }
-            
-            AppTheme.fatBorder(.blue)
-            AppTheme.roundedCorners()
-        }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        defaultStyle.apply(to: self)
     }
+    
+    @StyleBuilder
+    var defaultStyle: Style<UIView> {
+        GenericStyle { v in
+            v.backgroundColor = .blue
+        }
+        
+        AppTheme.fatBorder(.blue)
+        AppTheme.roundedCorners()
+    }
+    
 }
 ```
 

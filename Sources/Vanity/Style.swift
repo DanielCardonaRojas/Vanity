@@ -7,18 +7,34 @@
 
 import UIKit
 
-public struct Style<T> where T: UIView {
+public class Style<T> where T: UIView {
 
-    private let styling: (T) -> Void
+    let styling: (T) -> Void
 
     public init(_ styling: @escaping (T) -> Void) {
         self.styling = styling
+    }
+    
+    public init(from genericStyle: GenericStyle) {
+        self.styling = { cv in genericStyle.styling(cv) }
     }
 
     public func apply(to view: T) {
         styling(view)
     }
 }
+
+
+// MARK: GenericStyle
+public typealias GenericStyle = Style<UIView>
+extension GenericStyle {
+    func compatible<T: UIView>(with viewType: T.Type) -> Style<T> {
+        Style<T> { customView in
+            self.styling(customView)
+        }
+    }
+}
+
 
 // MARK: Shorthand helpers
 extension Style {
