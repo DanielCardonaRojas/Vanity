@@ -26,26 +26,34 @@ Add this to dependencies array:
 Create a theme enum or struct
 
 ```swift
-
-import UIKit
-
-// Put in all rules and organize how ever you like
-
 enum AppTheme {
-
-    static let titleLabelStyle = Style<UILabel> { lbl in
-        lbl.font = UIFont.boldSystemFont(ofSize: 27)
-    } + .aligned(.center) + .textColor(.blue)
-
     static let subtitleLabelStyle = Style<UILabel> { lbl in
         lbl.font = UIFont.boldSystemFont(ofSize: 20)
     }
 
     static let buttonStyle =  Style<UIButton> { btn in
         btn.tintColor = .brown
-        } + GenericStyle.fatBorder(.red) + .roundedCorners()
+        } + Self.fatBorder(.red) + Self.roundedCorners()
 
-    static let thickBlackBorder = GenericStyle.roundedCorners(5) + GenericStyle.fatBorder(.black)
+
+    // MARK: Generic styles
+    static func roundedCorners(_ value: CGFloat = 5.0) -> GenericStyle {
+        return GenericStyle { v in
+            v.layer.cornerRadius = value
+        }
+    }
+    
+    static func fatBorder(_ color: UIColor) -> GenericStyle {
+        return GenericStyle { v in
+            v.layer.borderColor = color.cgColor
+            v.layer.borderWidth = 2
+        }
+    }
+    
+    static let thickBlackBorder = Vanity.combine {
+        Self.roundedCorners()
+        Self.fatBorder(.black)
+    }
 }
 ```
 

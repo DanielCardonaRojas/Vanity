@@ -17,10 +17,6 @@ enum AppTheme {
         btn.tintColor = .brown
         } + Self.fatBorder(.red) + Self.roundedCorners()
 
-    static let thickBlackBorder = Vanity.combine {
-        Self.roundedCorners()
-        Self.fatBorder(.black)
-    }
 
     // MARK: Generic styles
     static let backgroundColor = GenericStyle.adjustingProperty(\.backgroundColor)
@@ -33,9 +29,14 @@ enum AppTheme {
     
     static func fatBorder(_ color: UIColor) -> GenericStyle {
         return GenericStyle { v in
-            v.layer.borderColor = UIColor.black.cgColor
+            v.layer.borderColor = color.cgColor
             v.layer.borderWidth = 2
         }
+    }
+    
+    static let thickBlackBorder = Vanity.combine {
+        Self.roundedCorners()
+        Self.fatBorder(.black)
     }
 }
 
