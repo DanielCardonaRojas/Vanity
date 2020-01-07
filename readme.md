@@ -8,7 +8,7 @@ Composable and reusable styling to UI elements.
 
 Add this to dependencies array:
 
-```
+```swift
 .package(url: "https://github.com/DanielCardonaRojas/Vanity.git", .upToNextMajor(from: "1.0.0")
 ```
 ## Features
@@ -23,7 +23,7 @@ Add this to dependencies array:
 
 **Define a theme**
 
-Create a theme enum or struct
+Organize styles anyway you like
 
 ```swift
 enum AppTheme {
@@ -31,53 +31,51 @@ enum AppTheme {
         lbl.font = UIFont.boldSystemFont(ofSize: 20)
     }
 
-    static let buttonStyle =  Style<UIButton> { btn in
+    static let baseButtonStyle =  Style<UIButton> { btn in
         btn.tintColor = .brown
-        } + Self.fatBorder(.red) + Self.roundedCorners()
+    }
 
+    static var primaryButtonStyle: Style<UIButton> =
+        Self.baseButtonStyle
+        |> .roundedCorners()
+        |> .fatBorder(.red)
+}
+```
 
-    // MARK: Generic styles
+Use styles across different UIView subclasses creating GenericStyle values.
+
+```swift
+fileprivate extension GenericStyle {
     static func roundedCorners(_ value: CGFloat = 5.0) -> GenericStyle {
         return GenericStyle { v in
             v.layer.cornerRadius = value
         }
     }
-    
+
     static func fatBorder(_ color: UIColor) -> GenericStyle {
         return GenericStyle { v in
             v.layer.borderColor = color.cgColor
             v.layer.borderWidth = 2
         }
     }
-    
-    static let thickBlackBorder = Vanity.combine {
-        Self.roundedCorners()
-        Self.fatBorder(.black)
-    }
 }
 ```
 
 **Mark apply to some view**
 
-Can be used as a property wrapper
 ```swift
 class TestView: UIView {
-
+    
+    let button = UIButton()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        defaultStyle.apply(to: self)
+        configureStyle()
     }
     
-    @StyleBuilder
-    var defaultStyle: Style<UIView> {
-        GenericStyle { v in
-            v.backgroundColor = .blue
-        }
-        
-        AppTheme.fatBorder(.blue)
-        AppTheme.roundedCorners()
+    func configureStyle() {
+        AppTheme.primaryButtonStyle.apply(to: button)
     }
-    
 }
 ```
 

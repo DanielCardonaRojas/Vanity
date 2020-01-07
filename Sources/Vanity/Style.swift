@@ -27,6 +27,8 @@ public class Style<T> where T: UIView {
 
 // MARK: GenericStyle
 public typealias GenericStyle = Style<UIView>
+//public class GenericStyle: Style<UIView> {}
+
 extension GenericStyle {
     func compatible<T: UIView>(with viewType: T.Type) -> Style<T> {
         Style<T> { customView in
