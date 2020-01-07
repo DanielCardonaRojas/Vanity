@@ -1,4 +1,6 @@
-# Vanity
+<p align="center">
+  <img src="vanity_logo.png">
+</p>
 
 Composable and reusable styling to UI elements.
 
