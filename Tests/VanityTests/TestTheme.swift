@@ -14,6 +14,7 @@ enum AppTheme {
     }
 
     static let buttonStyle =  Style<UIButton> { btn in
+        print("buttonstyle")
         btn.tintColor = .brown
         } + Self.fatBorder(.red) + Self.roundedCorners()
     
@@ -28,12 +29,14 @@ enum AppTheme {
     
     static func roundedCorners(_ value: CGFloat = 5.0) -> GenericStyle {
         return GenericStyle { v in
+            print("roundedCorners")
             v.layer.cornerRadius = value
         }
     }
     
     static func fatBorder(_ color: UIColor) -> GenericStyle {
         return GenericStyle { v in
+            print("fatBorder")
             v.layer.borderColor = color.cgColor
             v.layer.borderWidth = 2
         }
@@ -48,21 +51,31 @@ enum AppTheme {
 
 class TestView: UIView {
     
+    let button = UIButton()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        defaultStyle.apply(to: self)
+//        defaultStyle.apply(to: self)
+        buttonStyle().apply(to: button)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @StyleBuilder
+    @Vanity.StyleBuilder
     var defaultStyle: Style<UIView> {
         GenericStyle { v in
             v.backgroundColor = .blue
         }
         
+        AppTheme.fatBorder(.blue)
+        AppTheme.roundedCorners()
+    }
+    
+    @Vanity.Compose
+    func buttonStyle() -> Style<UIButton> {
+        AppTheme.buttonStyle
         AppTheme.fatBorder(.blue)
         AppTheme.roundedCorners()
     }
